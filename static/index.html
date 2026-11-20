@@ -113,21 +113,7 @@
     .brand-title span {
       color: #60a5fa;
     }
-    .hackathon-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, rgba(234, 67, 53, 0.15), rgba(66, 133, 244, 0.15));
-      border: 1px solid rgba(66, 133, 244, 0.3);
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #93c5fd;
-    }
-    .hackathon-badge i {
-      color: #ea4335;
-    }
+
 
     /* Hero */
     .hero {
@@ -679,14 +665,8 @@
           SmartBooth <span>Video AI</span>
         </div>
       </a>
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="hackathon-badge">
-          <i class="fa-brands fa-google"></i> Google Hackathon 2026
-        </span>
-        <span class="compliance-pill" style="margin: 0;">
-          <i class="fa-solid fa-bolt"></i> Cloudflare Edge
-        </span>
-      </div>
+      <!-- Header right area -->
+      <div></div>
     </div>
   </header>
 
@@ -698,7 +678,7 @@
       </div>
       <h1>Hyper-Personalized <br><span class="gradient-text">AI Campaign Video Engine</span></h1>
       <p>
-        Upload your campaign video, enter 4 to 5 voter names, and our AI surgical splice pipeline generates bespoke, lipsynced videos with ElevenLabs multilingual speech and Devanagari typography in seconds.
+        Upload your campaign video, enter 4 to 5 voter names, and our AI surgical splice pipeline generates bespoke, lipsynced personalized campaign videos with Devanagari typography in seconds.
       </p>
     </div>
 
@@ -795,7 +775,7 @@
         </div>
       </div>
 
-      <!-- Right Column: Personalization & ElevenLabs Config -->
+      <!-- Right Column: Personalization -->
       <div>
         <div class="card">
           <div class="card-header">
@@ -827,35 +807,6 @@
               <button type="button" class="preset-btn" onclick="setPresetNames(['सीता', 'सुरेश', 'चेतन', 'रामदेव', 'मीरा'])">Set A: Sarana Core (5)</button>
               <button type="button" class="preset-btn" onclick="setPresetNames(['मुकेश', 'शिवराज', 'बंसीलाल', 'राधा', 'गणेश'])">Set B: Sambhar Electors (5)</button>
               <button type="button" class="preset-btn" onclick="setPresetNames(['कमला', 'सुनीता', 'मंजू', 'पूजा', 'अनिता'])">Set C: Women Voters (5)</button>
-            </div>
-          </div>
-
-          <!-- ElevenLabs AI Configuration -->
-          <div style="margin-top: 24px;">
-            <div class="card-header" style="margin-bottom: 14px; padding-bottom: 8px;">
-              <div class="card-title" style="font-size: 1rem;">
-                <i class="fa-solid fa-microphone-lines" style="color: #a78bfa;"></i>
-                <span>ElevenLabs Multilingual Voice Synthesis</span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">
-                <span>ElevenLabs API Key</span>
-                <span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> Connected</span>
-              </label>
-              <input type="password" id="elevenApiKey" class="form-input" value="sk_8b067001bc0871474f7ef2593eee5ae7f70a35d18529661b">
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Voice Selection</label>
-              <select id="voiceSelect" class="form-select">
-                <option value="pFZP5JQG7iQjIQuC4Bku" selected>Lily - Multilingual Clear & Confident (Recommended)</option>
-                <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Mature, Reassuring, Confident</option>
-                <option value="CwhRBWXzGAHq8TQ4Fs17">Roger - Laid-Back, Casual, Resonant</option>
-                <option value="JBFqnCBsd6RMkjVDRZzb">George - Warm Storyteller</option>
-                <option value="IKne3meq5aSn9XLyUdCD">Charlie - Deep, Confident, Energetic</option>
-              </select>
             </div>
           </div>
 
@@ -921,12 +872,12 @@
         SmartBooth AI Video Campaign Engine
       </div>
       <div>
-        Built on Google Cloud Compute Engine (`8.231.107.200`) • Proxied with Cloudflare Edge SSL • Google Hackathon 2026
+        SmartBooth AI Campaign Suite • Personalized High-Throughput Video Generation
       </div>
       <div class="footer-badges">
         <span class="footer-badge-item"><i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> 100% WhatsApp Compliant</span>
         <span class="footer-badge-item"><i class="fa-solid fa-bolt" style="color: #3b82f6;"></i> &lt; 3.0s Splice Latency</span>
-        <span class="footer-badge-item"><i class="fa-solid fa-wave-square" style="color: #a78bfa;"></i> ElevenLabs Multilingual v2</span>
+        <span class="footer-badge-item"><i class="fa-solid fa-video" style="color: #3b82f6;"></i> Instant Mobile Streaming</span>
       </div>
     </div>
   </footer>
@@ -1095,9 +1046,7 @@
         ballot_no: document.getElementById("ballotNo").value,
         symbol_name: document.getElementById("symbolName").value,
         greeting_template: document.getElementById("greetingTemplate").value,
-        badge_template: document.getElementById("badgeTemplate").value,
-        eleven_api_key: document.getElementById("elevenApiKey").value,
-        voice_id: document.getElementById("voiceSelect").value
+        badge_template: document.getElementById("badgeTemplate").value
       };
 
       try {

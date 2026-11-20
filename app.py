@@ -216,9 +216,9 @@ def synthesize_greeting(name_hi: str, config: Dict[str, Any], out_wav: str) -> s
                     f.write(resp.content)
                 synthesized = True
             else:
-                add_log(f"ElevenLabs TTS returned HTTP {resp.status_code}: {resp.text[:100]}. Falling back to cache/local synthesis.")
+                add_log(f"Voice synthesis returned HTTP {resp.status_code}. Falling back to cache/local synthesis.")
         except Exception as e:
-            add_log(f"ElevenLabs request exception: {e}. Falling back.")
+            add_log(f"Voice synthesis exception: {e}. Falling back.")
 
     if not synthesized:
         cached_candidates = [
@@ -280,7 +280,7 @@ def render_personalized_video(name_hi: str, config: Dict[str, Any], step_callbac
     overlay_png = os.path.join(TEMP_DIR, f"{safe_name}_overlay.png")
 
     if step_callback:
-        step_callback("Synthesizing personalized greeting with ElevenLabs")
+        step_callback("Synthesizing personalized voice greeting")
     synthesize_greeting(name_hi, config, trimmed_wav)
 
     if step_callback:
