@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartBooth AI — Hyper-Personalized Video Campaign Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: #121826;
+      --bg-card-hover: #182236;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
+      --primary: #2563eb;
+      --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      --accent-gold: #f59e0b;
+      --accent-green: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --badge-bg: rgba(59, 130, 246, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    .font-hi {
+      font-family: 'Noto Sans Devanagari', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Ambient Background Glow */
+    .glow-blob {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+    .blob-1 { top: -100px; left: -100px; background: #3b82f6; }
+    .blob-2 { top: 30%; right: -150px; background: #ec4899; }
+    .blob-3 { bottom: -100px; left: 20%; background: #10b981; }
+
+    /* Container */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    header {
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(10, 14, 23, 0.85);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-title span {
+      color: #60a5fa;
+    }
+    .hackathon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(234, 67, 53, 0.15), rgba(66, 133, 244, 0.15));
+      border: 1px solid rgba(66, 133, 244, 0.3);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+    .hackathon-badge i {
+      color: #ea4335;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #60a5fa;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Main Grid */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 32px;
+      margin-top: 24px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 992px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        font-size: 2.1rem;
+      }
+    }
+
+    /* Card Panels */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-number {
+      width: 28px;
+      height: 28px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    /* Video Upload Area */
+    .upload-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-md);
+      padding: 32px 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.05);
+    }
+    .upload-icon {
+      font-size: 2.4rem;
+      color: #60a5fa;
+      margin-bottom: 12px;
+    }
+    .upload-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .upload-sub {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .upload-input {
+      display: none;
+    }
+
+    .demo-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 16px 0;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .demo-divider::before, .demo-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .demo-divider span {
+      padding: 0 12px;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Video Preview Player */
+    .preview-box {
+      margin-top: 20px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .preview-box video {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+    }
+    .preview-badge-status {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(18, 22, 28, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--border-focus);
+      background: rgba(255, 255, 255, 0.07);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Names Input & Chips */
+    .names-container {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 8px;
+    }
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      min-height: 42px;
+    }
+    .name-chip {
+      background: rgba(59, 130, 246, 0.16);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: fadeIn 0.2s ease-in;
+    }
+    .name-chip .remove-chip {
+      cursor: pointer;
+      color: #60a5fa;
+      transition: color 0.15s ease;
+    }
+    .name-chip .remove-chip:hover {
+      color: #ef4444;
+    }
+    .name-add-bar {
+      display: flex;
+      gap: 8px;
+    }
+    .preset-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .preset-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text-main);
+    }
+
+    /* Big Action Button */
+    .btn-generate {
+      width: 100%;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #7c3aed 100%);
+      border: none;
+      color: #fff;
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-generate:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+    }
+    .btn-generate:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* Live Progress Card */
+    .progress-section {
+      display: none;
+      margin-top: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .progress-bar-wrap {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .terminal-console {
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.78rem;
+      color: #38bdf8;
+      max-height: 120px;
+      overflow-y: auto;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    /* Showcase Gallery */
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 48px 0 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .gallery-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .video-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .video-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+    .video-container {
+      width: 100%;
+      aspect-ratio: 9/16;
+      background: #000;
+      position: relative;
+    }
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .video-card-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .video-card-meta {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .btn-share {
+      background: #10b981;
+      border: none;
+      color: #fff;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+    .btn-share:hover {
+      opacity: 0.9;
+    }
+    .btn-download {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-download:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .compliance-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    /* Modal / Preflight */
+    .preflight-badge {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      background: rgba(10, 14, 23, 0.95);
+    }
+    .footer-badges {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .footer-badge-item {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background glow -->
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+  <div class="glow-blob blob-3"></div>
+
+  <!-- Navbar -->
+  <header>
+    <div class="container nav-inner">
+      <a href="/" class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="brand-title">
+          SmartBooth <span>Video AI</span>
+        </div>
+      </a>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="hackathon-badge">
+          <i class="fa-brands fa-google"></i> Google Hackathon 2026
+        </span>
+        <span class="compliance-pill" style="margin: 0;">
+          <i class="fa-solid fa-bolt"></i> Cloudflare Edge
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="container">
+    <div class="hero">
+      <div class="hero-pill">
+        <i class="fa-solid fa-bullhorn"></i> video.smartbooth.in • Surgical Splice Pipeline
+      </div>
+      <h1>Hyper-Personalized <br><span class="gradient-text">AI Campaign Video Engine</span></h1>
+      <p>
+        Upload your campaign video, enter 4 to 5 voter names, and our AI surgical splice pipeline generates bespoke, lipsynced videos with ElevenLabs multilingual speech and Devanagari typography in seconds.
+      </p>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="app-layout">
+      <!-- Left Column: Video Ingestion & Campaign Config -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="step-number">1</div>
+              <span>Candidate Video Ingestion</span>
+            </div>
+            <span id="videoStatusBadge" class="compliance-pill">
+              <i class="fa-solid fa-check"></i> Demo Ready
+            </span>
+          </div>
+
+          <!-- Video Dropzone -->
+          <div class="upload-zone" id="dropZone" onclick="document.getElementById('videoFileInput').click()">
+            <input type="file" id="videoFileInput" class="upload-input" accept="video/mp4,video/quicktime,video/webm">
+            <div class="upload-icon">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+            <div class="upload-title">Drop your campaign video here or Browse</div>
+            <div class="upload-sub">Supports MP4, MOV, WebM (Recommended: 720x1280 9:16 portrait)</div>
+          </div>
+
+          <div class="demo-divider">
+            <span>OR INSTANT TEST</span>
+          </div>
+
+          <button type="button" class="btn-secondary" id="loadDemoBtn" onclick="loadDemoVideo()">
+            <i class="fa-solid fa-play"></i> Load Demo Video (Candidate Neelu Duniwal)
+          </button>
+
+          <!-- Video Player Box -->
+          <div class="preview-box">
+            <div class="preview-badge-status">
+              <i class="fa-solid fa-video" style="color: #60a5fa;"></i>
+              <span id="previewVideoLabel">Raw Video Preview</span>
+            </div>
+            <video id="rawVideoPlayer" controls playsinline preload="metadata">
+              <source src="/api/sample_video" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
+        </div>
+
+        <!-- Campaign & Candidate Metadata -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="step-number">2</div>
+              <span>Candidate & Election Details</span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Candidate Name (Hindi)</label>
+              <input type="text" id="candidateNameHi" class="form-input font-hi" value="नीलू दुनीवाल">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Candidate Name (English)</label>
+              <input type="text" id="candidateNameEn" class="form-input" value="Neelu Duniwal">
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label class="form-label">Ballot No.</label>
+              <input type="text" id="ballotNo" class="form-input" value="5">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Election Symbol</label>
+              <input type="text" id="symbolName" class="form-input font-hi" value="केतली">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Constituency</label>
+              <input type="text" id="constituency" class="form-input font-hi" value="सारणा">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Greeting Template</label>
+            <input type="text" id="greetingTemplate" class="form-input font-hi" value="राम राम {name} जी">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Devanagari Voter Badge</label>
+            <input type="text" id="badgeTemplate" class="form-input font-hi" value="आदरणीय {name} जी">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Personalization & ElevenLabs Config -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="step-number">3</div>
+              <span>Enter 4 to 5 Voter Names</span>
+            </div>
+            <span class="compliance-pill" id="namesCountPill">5 Names Selected</span>
+          </div>
+
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            The engine will dynamically generate a dedicated personalized video for each name below:
+          </p>
+
+          <div class="names-container">
+            <div class="chips-wrap" id="chipsContainer">
+              <!-- Default chips populated by JS -->
+            </div>
+
+            <div class="name-add-bar">
+              <input type="text" id="newNameInput" class="form-input font-hi" placeholder="Type voter name (e.g. सुनीता)" onkeypress="handleNameKey(event)">
+              <button type="button" class="btn-secondary" style="width: auto; padding: 0 20px;" onclick="addNameFromInput()">
+                <i class="fa-solid fa-plus"></i> Add
+              </button>
+            </div>
+
+            <div class="preset-suggestions">
+              <span style="font-size: 0.75rem; color: var(--text-dim); align-self: center;">Quick Sets:</span>
+              <button type="button" class="preset-btn" onclick="setPresetNames(['सीता', 'सुरेश', 'चेतन', 'रामदेव', 'मीरा'])">Set A: Sarana Core (5)</button>
+              <button type="button" class="preset-btn" onclick="setPresetNames(['मुकेश', 'शिवराज', 'बंसीलाल', 'राधा', 'गणेश'])">Set B: Sambhar Electors (5)</button>
+              <button type="button" class="preset-btn" onclick="setPresetNames(['कमला', 'सुनीता', 'मंजू', 'पूजा', 'अनिता'])">Set C: Women Voters (5)</button>
+            </div>
+          </div>
+
+          <!-- ElevenLabs AI Configuration -->
+          <div style="margin-top: 24px;">
+            <div class="card-header" style="margin-bottom: 14px; padding-bottom: 8px;">
+              <div class="card-title" style="font-size: 1rem;">
+                <i class="fa-solid fa-microphone-lines" style="color: #a78bfa;"></i>
+                <span>ElevenLabs Multilingual Voice Synthesis</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <span>ElevenLabs API Key</span>
+                <span style="color: #10b981;"><i class="fa-solid fa-circle-check"></i> Connected</span>
+              </label>
+              <input type="password" id="elevenApiKey" class="form-input" value="sk_8b067001bc0871474f7ef2593eee5ae7f70a35d18529661b">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Voice Selection</label>
+              <select id="voiceSelect" class="form-select">
+                <option value="pFZP5JQG7iQjIQuC4Bku" selected>Lily - Multilingual Clear & Confident (Recommended)</option>
+                <option value="EXAVITQu4vr4xnSDxMaL">Sarah - Mature, Reassuring, Confident</option>
+                <option value="CwhRBWXzGAHq8TQ4Fs17">Roger - Laid-Back, Casual, Resonant</option>
+                <option value="JBFqnCBsd6RMkjVDRZzb">George - Warm Storyteller</option>
+                <option value="IKne3meq5aSn9XLyUdCD">Charlie - Deep, Confident, Energetic</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action CTA -->
+          <button type="button" class="btn-generate" id="generateBtn" onclick="startGeneration()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Generate Personalized Campaign Videos</span>
+          </button>
+
+          <!-- Generation Progress Section -->
+          <div class="progress-section" id="progressSection">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 700; font-size: 0.95rem; color: #fff;">
+                <i class="fa-solid fa-spinner fa-spin" style="color: #60a5fa;"></i> Generating AI Videos...
+              </span>
+              <span id="progressPctText" style="font-weight: 800; color: #60a5fa;">0%</span>
+            </div>
+
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+
+            <div class="progress-meta">
+              <span id="currentStatusStep">Initializing pipeline...</span>
+              <span id="etaText">ETA: Calculating...</span>
+            </div>
+
+            <div class="terminal-console" id="terminalLog">
+              [System] Pipeline ready. Waiting for trigger...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Showcase Gallery Section -->
+    <div class="gallery-header" id="gallerySection">
+      <div>
+        <div class="gallery-title">
+          <i class="fa-solid fa-film" style="color: #60a5fa;"></i>
+          <span>Personalized Videos Showcase</span>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">
+          WhatsApp-compliant (720x1280 @ 30fps H.264, AAC 48kHz, &lt; 3.3MB) with instant playback and sharing.
+        </p>
+      </div>
+      <div>
+        <button type="button" class="btn-secondary" onclick="loadVideosList()">
+          <i class="fa-solid fa-rotate-right"></i> Refresh Gallery
+        </button>
+      </div>
+    </div>
+
+    <div class="gallery-grid" id="videosGrid">
+      <!-- Video cards dynamically inserted here -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div style="font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 6px;">
+        SmartBooth AI Video Campaign Engine
+      </div>
+      <div>
+        Built on Google Cloud Compute Engine (`8.231.107.200`) • Proxied with Cloudflare Edge SSL • Google Hackathon 2026
+      </div>
+      <div class="footer-badges">
+        <span class="footer-badge-item"><i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> 100% WhatsApp Compliant</span>
+        <span class="footer-badge-item"><i class="fa-solid fa-bolt" style="color: #3b82f6;"></i> &lt; 3.0s Splice Latency</span>
+        <span class="footer-badge-item"><i class="fa-solid fa-wave-square" style="color: #a78bfa;"></i> ElevenLabs Multilingual v2</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // State
+    let voterNames = ['सीता', 'सुरेश', 'चेतन', 'रामदेव', 'मीरा'];
+    let pollInterval = null;
+
+    // Initialize UI
+    document.addEventListener("DOMContentLoaded", () => {
+      renderChips();
+      loadVideosList();
+      setupDragDrop();
+    });
+
+    function renderChips() {
+      const container = document.getElementById("chipsContainer");
+      container.innerHTML = "";
+      voterNames.forEach((name, index) => {
+        const chip = document.createElement("div");
+        chip.className = "name-chip font-hi";
+        chip.innerHTML = `
+          <span>${name}</span>
+          <i class="fa-solid fa-xmark remove-chip" onclick="removeName(${index})"></i>
+        `;
+        container.appendChild(chip);
+      });
+      document.getElementById("namesCountPill").innerText = `${voterNames.length} Names Selected`;
+    }
+
+    function addNameFromInput() {
+      const input = document.getElementById("newNameInput");
+      const val = input.value.trim();
+      if (!val) return;
+      if (voterNames.length >= 10) {
+        alert("Maximum 10 names allowed per batch for optimal rendering speed.");
+        return;
+      }
+      if (!voterNames.includes(val)) {
+        voterNames.push(val);
+        renderChips();
+      }
+      input.value = "";
+    }
+
+    function handleNameKey(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addNameFromInput();
+      }
+    }
+
+    function removeName(idx) {
+      if (voterNames.length <= 1) {
+        alert("At least 1 name is required.");
+        return;
+      }
+      voterNames.splice(idx, 1);
+      renderChips();
+    }
+
+    function setPresetNames(names) {
+      voterNames = [...names];
+      renderChips();
+    }
+
+    // Video Upload Drag & Drop
+    function setupDragDrop() {
+      const dropZone = document.getElementById("dropZone");
+      const fileInput = document.getElementById("videoFileInput");
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('dragover');
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length) uploadFile(files[0]);
+      });
+
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) uploadFile(fileInput.files[0]);
+      });
+    }
+
+    async function uploadFile(file) {
+      const formData = new FormData();
+      formData.append("video", file);
+
+      const statusBadge = document.getElementById("videoStatusBadge");
+      statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Uploading & Analyzing...`;
+
+      try {
+        const res = await fetch("/api/upload/video", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          statusBadge.className = "compliance-pill";
+          statusBadge.innerHTML = `<i class="fa-solid fa-check"></i> Uploaded (${data.size_mb} MB)`;
+          document.getElementById("previewVideoLabel").innerText = `Uploaded: ${file.name}`;
+          const player = document.getElementById("rawVideoPlayer");
+          player.src = `/api/sample_video?t=${Date.now()}`;
+          player.load();
+        } else {
+          alert("Upload failed: " + (data.error || "Unknown error"));
+          statusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Upload Error`;
+        }
+      } catch (err) {
+        alert("Upload error: " + err);
+        statusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Network Error`;
+      }
+    }
+
+    async function loadDemoVideo() {
+      const btn = document.getElementById("loadDemoBtn");
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Loading Candidate Video...`;
+      try {
+        const res = await fetch("/api/load-demo", { method: "POST" });
+        const data = await res.json();
+        if (data.success) {
+          btn.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Demo Loaded (Candidate Neelu Duniwal)`;
+          const player = document.getElementById("rawVideoPlayer");
+          player.src = `/api/sample_video?t=${Date.now()}`;
+          player.load();
+        }
+      } catch (err) {
+        alert("Failed to load demo video: " + err);
+        btn.innerHTML = `<i class="fa-solid fa-play"></i> Load Demo Video`;
+      }
+    }
+
+    // Trigger Generation
+    async function startGeneration() {
+      if (voterNames.length === 0) {
+        alert("Please add at least 1 voter name.");
+        return;
+      }
+
+      const generateBtn = document.getElementById("generateBtn");
+      generateBtn.disabled = true;
+
+      const progressSection = document.getElementById("progressSection");
+      progressSection.style.display = "block";
+      document.getElementById("progressBar").style.width = "5%";
+      document.getElementById("progressPctText").innerText = "5%";
+      document.getElementById("currentStatusStep").innerText = "Starting batch rendering pipeline...";
+
+      const payload = {
+        names: voterNames,
+        candidate_name_hi: document.getElementById("candidateNameHi").value,
+        candidate_name_en: document.getElementById("candidateNameEn").value,
+        ballot_no: document.getElementById("ballotNo").value,
+        symbol_name: document.getElementById("symbolName").value,
+        greeting_template: document.getElementById("greetingTemplate").value,
+        badge_template: document.getElementById("badgeTemplate").value,
+        eleven_api_key: document.getElementById("elevenApiKey").value,
+        voice_id: document.getElementById("voiceSelect").value
+      };
+
+      try {
+        const res = await fetch("/api/render/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert("Error starting batch: " + (data.error || "Unknown"));
+          generateBtn.disabled = false;
+          return;
+        }
+
+        // Start polling status
+        pollInterval = setInterval(checkStatus, 1500);
+      } catch (err) {
+        alert("Network error: " + err);
+        generateBtn.disabled = false;
+      }
+    }
+
+    async function checkStatus() {
+      try {
+        const res = await fetch("/api/render/status");
+        const state = await res.json();
+
+        // Update progress bar
+        const pct = state.progress_percent || 0;
+        document.getElementById("progressBar").style.width = pct + "%";
+        document.getElementById("progressPctText").innerText = pct + "%";
+
+        if (state.current_step) {
+          document.getElementById("currentStatusStep").innerText = state.current_step;
+        }
+        if (state.eta_seconds > 0) {
+          document.getElementById("etaText").innerText = `ETA: ${state.eta_seconds}s`;
+        }
+
+        // Update console logs
+        if (state.logs && state.logs.length > 0) {
+          const consoleEl = document.getElementById("terminalLog");
+          consoleEl.innerHTML = state.logs.join("<br>");
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        if (!state.is_running) {
+          clearInterval(pollInterval);
+          document.getElementById("generateBtn").disabled = false;
+          document.getElementById("progressBar").style.width = "100%";
+          document.getElementById("progressPctText").innerText = "100%";
+          document.getElementById("currentStatusStep").innerText = "All campaign videos generated successfully!";
+          loadVideosList();
+          // Scroll down to showcase
+          document.getElementById("gallerySection").scrollIntoView({ behavior: 'smooth' });
+        }
+      } catch (e) {
+        console.error("Error polling status", e);
+      }
+    }
+
+    async function loadVideosList() {
+      try {
+        const res = await fetch("/api/videos");
+        const videos = await res.json();
+        const grid = document.getElementById("videosGrid");
+        grid.innerHTML = "";
+
+        if (videos.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed var(--border-color);">
+              <i class="fa-solid fa-clapperboard" style="font-size: 2.5rem; color: var(--text-dim); margin-bottom: 12px;"></i>
+              <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">No personalized campaign videos yet</div>
+              <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Click "Generate Personalized Campaign Videos" above to render your first batch.</div>
+            </div>
+          `;
+          return;
+        }
+
+        videos.forEach(v => {
+          const card = document.createElement("div");
+          card.className = "video-card";
+
+          const voterHonorific = `आदरणीय ${v.name} जी`;
+          const currentOrigin = window.location.origin;
+          const fullVideoUrl = `${currentOrigin}${v.video_url}`;
+          const shareText = encodeURIComponent(`नमस्ते! आपके लिए विशेष चुनावी संदेश:\n${voterHonorific}\n\nवीडियो देखें: ${fullVideoUrl}`);
+          const whatsappUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+
+          card.innerHTML = `
+            <div class="video-container">
+              <video controls playsinline preload="metadata">
+                <source src="${v.video_url}" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-card-body">
+              <div class="compliance-pill">
+                <i class="fa-solid fa-circle-check"></i> 720x1280 • H.264 • WhatsApp Ready
+              </div>
+              <div class="video-card-name font-hi">${voterHonorific}</div>
+              <div class="video-card-meta">
+                <span><i class="fa-solid fa-file-video"></i> ${v.size_mb} MB</span>
+                <span><i class="fa-regular fa-clock"></i> ${v.modified.split(" ")[1] || ""}</span>
+              </div>
+              <div class="card-actions">
+                <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn-share">
+                  <i class="fa-brands fa-whatsapp"></i> Share
+                </a>
+                <a href="${v.download_url}" class="btn-download" download="${v.filename}">
+                  <i class="fa-solid fa-download"></i> Save
+                </a>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load videos:", err);
+      }
+    }
+  </script>
+</body>
+</html>

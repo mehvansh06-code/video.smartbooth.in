@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+temp_pipeline/
+.DS_Store
+*.log
+campaign_config.json
